@@ -1,28 +1,24 @@
 #!/usr/bin/env python3
 
-import pickle
+import shelve
 
 
 class Weather:
-    # cache = 'locations.txt'
+    db_path = 'locations'
 
     def __init__(self, *args, **kwargs):
         self._set_data(args[0])
-        self._location = None
+        self._geolocation = None
 
         if len(args) == 2:
             location = self.get_data('Location')
-            # with open(self.__class__.cache, 'a+') as cache:
-            #     cache.seek(0)
-            #     for line in cache:
-            #         if location in line:
-            #             self._location = args[1].geocode(
-            #                 line[line.index(':') + 1:])
-            #             break
-            #     else:
-            #         cache.write('{}: ')
+            with shelve.open(self.__class__.db_path) as db:
+                if location in db:
+                    self._geolocation = db[location]
 
-            self._location = args[1].geocode(location)
+                else:
+                    self._geolocation = args[1].geocode(location)
+                    db[location] = self._geolocation
 
     def _set_data(self, data):
         for (k, v) in data.items():
@@ -35,16 +31,7 @@ class Weather:
         return getattr(self, '_{}'.format(k.lower().replace(' ', '_')))
 
     def get_location(self):
-        return self._location
-
-
-# def get_by_location_attr(weather_objs, location_attr, value):
-#     new_weather_objs = []
-#     for weather_obj in weather_objs:
-#         if value == getattr(weather_obj.get_location(), location_attr):
-#             new_weather_objs.append(weather_obj)
-#
-#     return new_weather_objs
+        return self._geolocation
 
 
 def get_by_coords(weather_objs, latitude=0, latitude_tolerance=90, longitude=0,

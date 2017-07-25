@@ -8,22 +8,22 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
 
 
-def plot_over_time(weather_objs, data, trait, fit_line=False):
+def plot_over_time(weather_objs, key, fit_line=False):
     """
     Plots weather data against time and optionally a linear line of best fit.
 
     weather_objs: an iterable of Weather objects
-    data: an iterable of the data that should be plotted
-    trait: the desired trait to be plotted; a string
+    key: the key of the desired values to be plotted; a string
     fit_line: whether a line of best fit should be plotted
     """
-    data = np.array(data)
+    data = np.array([weather_obj.get_data(key)
+                     for weather_obj in weather_objs])
     dates = [weather_obj.get_data('Full') for weather_obj in weather_objs]
     dates = [datetime.strptime(date, '%m-%d-%Y') for date in dates]
     dates = np.array(date2num(dates))
 
     plt.plot_date(dates, data)
-    plt.title('{} Over Time'.format(trait))
+    plt.title('{} Over Time'.format(key))
     plt.xlabel('Date')
     plt.ylabel('Value')
 
