@@ -30,4 +30,5 @@ def plot_over_time(weather_objs, key, fit_line=False):
     if fit_line:
         plt.plot(dates, np.poly1d(np.polyfit(dates, data, 1))(dates), 'r')
 
+    plt.savefig('corgis_{}.png'.format(key.replace(' ', '_').lower()), transparent=True, bbox_inches='tight')
     plt.show()

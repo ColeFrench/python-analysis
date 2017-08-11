@@ -41,7 +41,8 @@ def main():
     plt.title('Changes in Temperature by Hundredths of Degrees Celsius in {} Over Time'.format(
         sys.argv[1]))
     plt.xlabel('Year')
-    plt.ylabel('Change in Temperature (Hundredth of a Degree Celsius)')
+    plt.ylabel('Change in Temperature\n(Hundredth of a Degree Celsius)')
+    plt.savefig('nasa_{}.png'.format(sys.argv[1].lower()), transparent=True, bbox_inches='tight')
     plt.show()
 
 
